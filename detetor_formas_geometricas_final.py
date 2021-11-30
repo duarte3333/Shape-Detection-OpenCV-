@@ -68,7 +68,6 @@ def detetor_formas():
     #Leitura da imagem com formas geometricas
     img = cv2.imread('formas5.png')
     cor, forma = user_input()
-
     lower, upper = escolher_cor(cor)
 
     #imgGrey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -81,10 +80,10 @@ def detetor_formas():
     
     #Caso a imagem tenha pixels com cor abaixo de 200 entao o valor dos pixels passa para 0,se
     #a cor for maior que 200, esses pixels passam para o valor máximo,que em geral é 255
-    _, thrash = cv2.threshold(mask,200,255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C)
 
-    #Lista dos diferentes contornos encontrados na imagem
-    contours, _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    #_, thrash = cv2.threshold(mask,200,255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C)
+    
+    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     
     #vai se percorrer o contorno de cada poligno individualmente
     lista_formas = ['Triangulo','triangulo','Quadrado','quadrado','Retangulo','retangulo','Pentagono','pentagono','Hexagono','hexagono'
@@ -98,9 +97,6 @@ def detetor_formas():
         epsilon =  0.01* cv2.arcLength(contour, True)
         
         approx = cv2.approxPolyDP(contour,epsilon, True)
-        
-        #desenha-se os contornos de cada poligno na imagem
-        #cv2.drawContours(img, [approx], 0, (0, 0, 0), 2)
         
         #coordenadas para colocar o texto do nome da detecao obtida
         x = approx.ravel()[0]
@@ -135,8 +131,8 @@ def detetor_formas():
             cv2.drawContours(img, [approx], 0, (0, 0, 0), 2)
             cv2.putText(img, "Estrela", (x-30, y+4), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0))
             
-        #elif len(approx) in lista1:
-        #    pass
+        elif len(approx) in lista1:
+            pass
         else:
             #Calcular os pontos mais à esquerda e mais à direita 
             leftmost = tuple(approx[approx[:,:,0].argmin()][0])
